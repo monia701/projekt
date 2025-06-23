@@ -84,6 +84,7 @@ while game_running:
     player1 = Player(400, HEIGHT - PLAYER_HEIGHT - 50, "Gracz1", pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_f)
     player2 = Player(1200, HEIGHT - PLAYER_HEIGHT - 50, "Gracz2", pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP,
                      pygame.K_RETURN)
+    player2 = Player(1200, HEIGHT - PLAYER_HEIGHT - 50, "Gracz2", pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_RETURN)
 
     # --- Power-up ---
     heart_timer = 300  # co ile klatek pojawia się serduszko (~5 sekund)
@@ -108,6 +109,24 @@ player2.handle_input(keys)
 player1.update()
 player2.update()
 
+# --- Kamera ---
+        center_between_players = (player1.rect.centerx + player2.rect.centerx) // 2
+        scroll_x = center_between_players - WIDTH // 2
+        scroll_x = max(0, min(scroll_x, bg_width - WIDTH))
+
+        screen.blit(bg, (-scroll_x, 0))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                game_running = False
+
+        keys = pygame.key.get_pressed()
+        player1.handle_input(keys)
+        player2.handle_input(keys)
+
+        player1.update()
+        player2.update()
 
 # --- Koniec gry ---
 pygame.quit()
