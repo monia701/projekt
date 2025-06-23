@@ -75,6 +75,18 @@ def save_result(winner):
     with open("wyniki.txt", "a") as file:
         file.write(f"{winner} wygrał\n")
 
+def draw_health():
+    p1_text = font.render(f"P1 HP: {player1.hp}", True, WHITE)
+    p2_text = font.render(f"P2 HP: {player2.hp}", True, WHITE)
+    screen.blit(p1_text, (20, 20))
+    screen.blit(p2_text, (WIDTH - 200, 20))
+
+# --- Klasa Heart (power-up) ---
+class Heart:
+    def __init__(self, x, y):
+        self.rect = pygame.Rect(x, y, 40, 40)
+        self.image = pygame.image.load("assets/images/heart.png")
+        self.image = pygame.transform.scale(self.image, (40, 40))
 
 game_running = True
 while game_running:
@@ -128,5 +140,20 @@ player2.update()
         player1.update()
         player2.update()
 
+# --- Kolizja i obrażenia ---
+if player1.attacking and player1.rect.colliderect(player2.rect):
+    player2.take_damage()
+    player1.attacking = False
+if player2.attacking and player2.rect.colliderect(player1.rect):
+    player1.take_damage()
+    player2.attacking = False
+
+# Sprawdzanie kolizji z graczami
+if player1.rect.colliderect(heart.rect):
+    player1.hp = min(player1.hp + 1, 10)
+    heart = None
+elif player2.rect.colliderect(heart.rect):
+    player2.hp = min(player2.hp + 1, 10)
+    heart = None
 # --- Koniec gry ---
 pygame.quit()
