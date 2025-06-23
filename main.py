@@ -68,3 +68,21 @@ def save_result(winner):
     with open("wyniki.txt", "a") as file:
         file.write(f"{winner} wygrał\n")
 
+       # --- Kamera ---
+        center_between_players = (player1.rect.centerx + player2.rect.centerx) // 2
+        scroll_x = center_between_players - WIDTH // 2
+        scroll_x = max(0, min(scroll_x, bg_width - WIDTH))
+
+        screen.blit(bg, (-scroll_x, 0))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                game_running = False
+
+        keys = pygame.key.get_pressed()
+        player1.handle_input(keys)
+        player2.handle_input(keys)
+
+        player1.update()
+        player2.update()
