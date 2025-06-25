@@ -69,3 +69,20 @@ class Player(GameObject):
             image = pygame.Surface((PLAYER_WIDTH, PLAYER_HEIGHT))
             image.fill((255, 0, 255))
         image = pygame.transform.scale(image, (PLAYER_WIDTH, PLAYER_HEIGHT))
+
+        # Miganie przy obrażeniu
+        if self.hurt_timer > 0 and (self.hurt_timer // 5) % 2 == 0:
+            image.set_alpha(128)
+        else:
+            image.set_alpha(255)
+
+        screen.blit(image, (screen_x, self.rect.y))
+
+        # Pasek życia
+        bar_width = PLAYER_WIDTH
+        bar_height = 10
+        fill = int(bar_width * (self.hp / 10))
+        bar_x = screen_x
+        bar_y = self.rect.y - 15
+        pygame.draw.rect(screen, (255, 0, 0), (bar_x, bar_y, bar_width, bar_height))
+        pygame.draw.rect(screen, (0, 255, 0), (bar_x, bar_y, fill, bar_height))
